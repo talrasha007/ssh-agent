@@ -1,0 +1,28 @@
+service: ssh-agent
+frameworkVersion: "3"
+
+provider:
+  name: aws
+  runtime: nodejs20.x
+  stage: prod
+  region: ap-east-1
+  memorySize: 1024
+
+functions:
+  http:
+    handler: ssh.handler
+    url: true
+    timeout: 120
+
+resources:
+  extensions:
+    HttpLambdaFunctionUrl:
+      Properties:
+        InvokeMode: RESPONSE_STREAM
+        Cors:
+          AllowOrigins:
+            - "*"
+          AllowMethods:
+            - "POST"
+          AllowHeaders:
+            - "content-type"

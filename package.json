@@ -1,0 +1,28 @@
+{
+  "name": "ssh-agent",
+  "version": "0.0.1",
+  "description": "SSH agent runs on aws lambda.",
+  "main": "ssh.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/talrasha007/ssh-agent.git"
+  },
+  "keywords": [
+    "SSH",
+    "Agent",
+    "Serverless",
+    "Lambda"
+  ],
+  "author": "Tal (talrasha007@gmail.com)",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/talrasha007/ssh-agent/issues"
+  },
+  "homepage": "https://github.com/talrasha007/ssh-agent#readme",
+  "dependencies": {
+    "ssh2-promise": "^1.0.3"
+  }
+}
