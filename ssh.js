@@ -28,11 +28,13 @@ module.exports.handler = awslambda.streamifyResponse(async (event, responseStrea
     for (const command of body.commands) {
       shell.write(command + '\n');
       await new Promise(r => {
+        let lastData = '';
         onData = data => {
-          if (data.indexOf(command) >= 0) {
+          if (data.includes(command) && !lastData.endsWith(command)) {
             onData = null;
             r();
           }
+          lastData = data;
         };
       });
     }
