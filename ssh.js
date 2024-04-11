@@ -19,7 +19,6 @@ module.exports.handler = awslambda.streamifyResponse(async (event, responseStrea
     const shell = await ssh.shell();
     shell.on('data', data => responseStream.write(`data: ${JSON.stringify({ data: data.toString() })}\n\n`));
     for (const command of body.commands) {
-      responseStream.write(`data: ${JSON.stringify({ data: `${username}@${host}$ ${command}\n` })}\n\n`);
       shell.write(command + '\n');
     }
 
