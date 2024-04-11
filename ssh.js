@@ -29,7 +29,7 @@ module.exports.handler = awslambda.streamifyResponse(async (event, responseStrea
       shell.write(command + '\n');
       await new Promise(r => {
         onData = data => {
-          if (data.includes(command)) {
+          if (data.indexOf(command) > 0) {
             onData = null;
             r();
           }
