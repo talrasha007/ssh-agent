@@ -16,15 +16,15 @@ module.exports.handler = awslambda.streamifyResponse(async (event, responseStrea
     ssh = new SSH(config);
     await ssh.connect();
 
+    const shell = await ssh.shell();
+    shell.on('data', data => responseStream.write(`data: ${JSON.stringify({ data: data.toString() })}\n\n`));
     for (const command of body.commands) {
       responseStream.write(`data: ${JSON.stringify({ data: `${username}@${host}$ ${command}\n` })}\n\n`);
-      const socket = await ssh.spawn(command);
-      socket.on('data', data => responseStream.write(`data: ${JSON.stringify({ data: data.toString() })}\n\n`));
-      await new Promise((resolve, reject) => {
-        socket.on('close', resolve);
-        socket.on('error', e => reject(e));
-      });
+      shell.write(command + '\n');
     }
+
+    shell.write('exit\n');
+    await new Promise(resolve => shell.on('close', resolve));
   } catch (e) {
     responseStream.write(`data: ${JSON.stringify({ error: e.message || e })}\n\n`);
   } finally {
