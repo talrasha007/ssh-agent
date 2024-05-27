@@ -25,20 +25,8 @@ module.exports.handler = awslambda.streamifyResponse(async (event, responseStrea
       if (onData) onData(data);
     });
 
-    for (const command of body.commands) {
-      shell.write(command + '\n');
-      await new Promise(r => {
-        let lastData = '';
-        onData = data => {
-          if (data.includes(command) && !lastData.endsWith('\n')) {
-            onData = null;
-            r();
-          }
-          lastData = data;
-        };
-      });
-    }
-
+    const command = body.command.replace(/\"/g, '\\"');
+    shell.write(`echo "${command}" | bash\n`);
     shell.write('exit\n');
     await new Promise(resolve => shell.on('close', resolve));
   } catch (e) {
