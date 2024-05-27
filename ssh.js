@@ -26,8 +26,7 @@ module.exports.handler = awslambda.streamifyResponse(async (event, responseStrea
     });
 
     const command = body.command.replace(/\"/g, '\\"');
-    shell.write(`echo "${command}" | bash\n`);
-    shell.write('exit\n');
+    shell.write(`echo "${command}" | bash\nexit\n`);
     await new Promise(resolve => shell.on('close', resolve));
   } catch (e) {
     responseStream.write(`data: ${JSON.stringify({ error: e.message || e })}\n\n`);
